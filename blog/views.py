@@ -92,12 +92,21 @@ def comment_remove(request, pk):
 
 
 class GetPostInfoView(APIView):
+    serializer_class = PostSerializer
+    model = Post
+
     def get(self, request):
-        # Получаем набор всех записей из таблицы Capital
-        queryset = Post.objects.all()
-        # Сериализуем извлечённый набор записей
-        serializer_for_queryset = PostSerializer(
-            instance=queryset, # Передаём набор записей
-            many=True # Указываем, что на вход подаётся именно набор записей
+        serializer_for_reading = self.serializer_class(
+            instance=self.model.objects.all(),
+            many=True
         )
-        return Response(serializer_for_queryset.data)
+        return Response(serializer_for_reading.data)
+
+    def post(self, request):
+        serializer_for_writing = self.serializer_class(data=request.data)
+        serializer_for_writing.is_valid(raise_exception=True)
+        serializer_for_writing.save()
+        return Response(
+            data=serializer_for_writing.data,
+            status=status.HTTP_201_CREATED
+        )
