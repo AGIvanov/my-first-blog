@@ -91,8 +91,18 @@ def comment_remove(request, pk):
     return redirect('post_detail', pk=comment.post.pk)
 
 
-class ArticleView(APIView):
+class PostView(APIView):
     serializer_class = PostSerializer
+
+    def put(self, request, pk):
+        saved_article = get_object_or_404(Post.objects.all(), pk=pk)
+        data = request.data.get('articles')
+        serializer = PostSerializer(instance=saved_article, data=data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            article_saved = serializer.save()
+        return Response({
+            "success": "Article '{}' updated successfully".format(article_saved.title)
+        })
 
     def get(self, request):
         articles = Post.objects.all()
@@ -100,8 +110,8 @@ class ArticleView(APIView):
         return Response({"articles": serializer.data})
 
     def post(self, request):
-        articles = request.data
-        serializer = PostSerializer(data=articles)
+        article = request.data.get('articles')
+        serializer = PostSerializer(data=article)
         if serializer.is_valid(raise_exception=True):
             article_saved = serializer.save()
         return Response({"success": "Article '{}' created successfully".format(article_saved.title)})
