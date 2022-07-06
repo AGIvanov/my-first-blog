@@ -91,22 +91,17 @@ def comment_remove(request, pk):
     return redirect('post_detail', pk=comment.post.pk)
 
 
-class GetPostInfoView(APIView):
+class ArticleView(APIView):
     serializer_class = PostSerializer
-    model = Post
 
     def get(self, request):
-        serializer_for_reading = self.serializer_class(
-            instance=self.model.objects.all(),
-            many=True
-        )
-        return Response(serializer_for_reading.data)
+        articles = Post.objects.all()
+        serializer = PostSerializer(articles, many=True)
+        return Response({"articles": serializer.data})
 
     def post(self, request):
-        serializer_for_writing = self.serializer_class(data=request.data)
-        serializer_for_writing.is_valid(raise_exception=True)
-        serializer_for_writing.save()
-        return Response(
-            data=serializer_for_writing.data,
-            status=status.HTTP_201_CREATED
-        )
+        articles = request.data
+        serializer = PostSerializer(data=articles)
+        if serializer.is_valid(raise_exception=True):
+            article_saved = serializer.save()
+        return Response({"success": "Article '{}' created successfully".format(article_saved.title)})
