@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import PostSerializer
 
+
+
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     return render(request, 'blog/post_list.html/', {'posts': posts})
@@ -115,3 +117,4 @@ class PostView(APIView):
         if serializer.is_valid(raise_exception=True):
             article_saved = serializer.save()
         return Response({"success": "Article '{}' created successfully".format(article_saved.title)})
+

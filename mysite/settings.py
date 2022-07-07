@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'accounts',
     'rest_framework',
 ]
 
@@ -121,3 +122,4 @@ LOGIN_REDIRECT_URL = '/'
 BASE_URL = "http://127.0.0.1:8000"
 DEV_SERVER = len(sys.argv) > 1 and sys.argv[1] == "runserver"
 USE_NGROK = os.environ.get("USE_NGROK", "False") == "True" and os.environ.get("RUN_MAIN", None) != "true"
+
