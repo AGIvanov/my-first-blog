@@ -1,5 +1,5 @@
 # my-first-blog
-Standard blog to chat
+Standard blog to chat with posting/registartion/API/comments features
 
 Next aims to be released:
 - files/images uploading
