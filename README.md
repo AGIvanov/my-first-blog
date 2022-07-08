@@ -7,4 +7,5 @@ Next aims to be released:
 - API for russian football matches via DRF (for now you can only CRUD posts via API)
 - enhance front-end via React ot vue
 - Web-sockets system for users approach
-- hosting
+- asynching with Celery + Redis
+- deploying with NGinx + Docker
